@@ -7,18 +7,34 @@ from . import BaseCommand
 
 
 def serve_autovf_command_factory(args):
-    return ServeAutoVFCommand(args.model_path, args.port, args.host, args.workers, args.debug)
+    return ServeAutoVFCommand(
+        args.model_path, args.port, args.host, args.workers, args.debug
+    )
 
 
 class ServeAutoVFCommand(BaseCommand):
     @staticmethod
     def register_subcommand(parser: ArgumentParser):
         _parser = parser.add_parser("serve", help="Serve AutoVF API")
-        _parser.add_argument("--model_path", help="Path to model", required=True, type=str)
-        _parser.add_argument("--port", help="Port to serve on", default=9999, type=int, required=False)
-        _parser.add_argument("--host", help="Host to serve on", default="127.0.0.1", type=str, required=False)
-        _parser.add_argument("--workers", help="Number of workers", default=1, type=int, required=False)
-        _parser.add_argument("--debug", help="Debug mode", action="store_true", required=False)
+        _parser.add_argument(
+            "--model_path", help="Path to model", required=True, type=str
+        )
+        _parser.add_argument(
+            "--port", help="Port to serve on", default=9999, type=int, required=False
+        )
+        _parser.add_argument(
+            "--host",
+            help="Host to serve on",
+            default="127.0.0.1",
+            type=str,
+            required=False,
+        )
+        _parser.add_argument(
+            "--workers", help="Number of workers", default=1, type=int, required=False
+        )
+        _parser.add_argument(
+            "--debug", help="Debug mode", action="store_true", required=False
+        )
         _parser.set_defaults(func=serve_autovf_command_factory)
 
     def __init__(self, model_path, port, host, workers, debug):

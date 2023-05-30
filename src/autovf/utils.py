@@ -22,7 +22,7 @@ def reduce_memory_usage(df, verbose=True):
     # NOTE: Original author of this function is unknown
     # if you know the *original author*, please let me know.
     numerics = ["int8", "int16", "int32", "int64", "float16", "float32", "float64"]
-    start_mem = df.memory_usage().sum() / 1024 ** 2
+    start_mem = df.memory_usage().sum() / 1024**2
     for col in df.columns:
         col_type = df[col].dtypes
         if col_type in numerics:
@@ -38,13 +38,19 @@ def reduce_memory_usage(df, verbose=True):
                 elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
                     df[col] = df[col].astype(np.int64)
             else:
-                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                if (
+                    c_min > np.finfo(np.float16).min
+                    and c_max < np.finfo(np.float16).max
+                ):
                     df[col] = df[col].astype(np.float16)
-                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                elif (
+                    c_min > np.finfo(np.float32).min
+                    and c_max < np.finfo(np.float32).max
+                ):
                     df[col] = df[col].astype(np.float32)
                 else:
                     df[col] = df[col].astype(np.float64)
-    end_mem = df.memory_usage().sum() / 1024 ** 2
+    end_mem = df.memory_usage().sum() / 1024**2
     if verbose:
         logger.info(
             "Mem. usage decreased to {:.2f} Mb ({:.1f}% reduction)".format(
@@ -61,12 +67,18 @@ def dict_mean(dict_list):
     return mean_dict
 
 
-def save_valid_predictions(final_valid_predictions, model_config, target_encoder, output_file_name):
-    final_valid_predictions = pd.DataFrame.from_dict(final_valid_predictions, orient="index").reset_index()
+def save_valid_predictions(
+    final_valid_predictions, model_config, target_encoder, output_file_name
+):
+    final_valid_predictions = pd.DataFrame.from_dict(
+        final_valid_predictions, orient="index"
+    ).reset_index()
     if target_encoder is None:
         final_valid_predictions.columns = [model_config.idx] + model_config.targets
     else:
-        final_valid_predictions.columns = [model_config.idx] + list(target_encoder.classes_)
+        final_valid_predictions.columns = [model_config.idx] + list(
+            target_encoder.classes_
+        )
 
     final_valid_predictions.to_csv(
         os.path.join(model_config.output, output_file_name),
@@ -74,12 +86,18 @@ def save_valid_predictions(final_valid_predictions, model_config, target_encoder
     )
 
 
-def save_test_predictions(final_test_predictions, model_config, target_encoder, test_ids, output_file_name):
+def save_test_predictions(
+    final_test_predictions, model_config, target_encoder, test_ids, output_file_name
+):
     final_test_predictions = np.mean(final_test_predictions, axis=0)
     if target_encoder is None:
-        final_test_predictions = pd.DataFrame(final_test_predictions, columns=model_config.targets)
+        final_test_predictions = pd.DataFrame(
+            final_test_predictions, columns=model_config.targets
+        )
     else:
-        final_test_predictions = pd.DataFrame(final_test_predictions, columns=list(target_encoder.classes_))
+        final_test_predictions = pd.DataFrame(
+            final_test_predictions, columns=list(target_encoder.classes_)
+        )
     final_test_predictions.insert(loc=0, column=model_config.idx, value=test_ids)
     final_test_predictions.to_csv(
         os.path.join(model_config.output, output_file_name),
@@ -135,8 +153,12 @@ def optimize(
     scores = []
 
     for fold in range(model_config.num_folds):
-        train_feather = pd.read_feather(os.path.join(model_config.output, f"train_fold_{fold}.feather"))
-        valid_feather = pd.read_feather(os.path.join(model_config.output, f"valid_fold_{fold}.feather"))
+        train_feather = pd.read_feather(
+            os.path.join(model_config.output, f"train_fold_{fold}.feather")
+        )
+        valid_feather = pd.read_feather(
+            os.path.join(model_config.output, f"valid_fold_{fold}.feather")
+        )
         xtrain = train_feather[model_config.features]
         xvalid = valid_feather[model_config.features]
 
@@ -151,7 +173,10 @@ def optimize(
             **params,
         )
 
-        if model_config.problem_type in (ProblemType.multi_column_regression, ProblemType.multi_label_classification):
+        if model_config.problem_type in (
+            ProblemType.multi_column_regression,
+            ProblemType.multi_label_classification,
+        ):
             ypred = []
             models = [model] * len(model_config.targets)
             for idx, _m in enumerate(models):
@@ -195,7 +220,9 @@ def optimize(
 
 
 def train_model(model_config):
-    xgb_model, use_predict_proba, eval_metric, direction = fetch_xgb_model_params(model_config)
+    xgb_model, use_predict_proba, eval_metric, direction = fetch_xgb_model_params(
+        model_config
+    )
 
     optimize_func = partial(
         optimize,
@@ -211,7 +238,9 @@ def train_model(model_config):
         storage=f"sqlite:///{db_path}",
         load_if_exists=True,
     )
-    study.optimize(optimize_func, n_trials=model_config.num_trials, timeout=model_config.time_limit)
+    study.optimize(
+        optimize_func, n_trials=model_config.num_trials, timeout=model_config.time_limit
+    )
     return study.best_params
 
 
@@ -239,8 +268,12 @@ def predict_model(model_config, best_params):
 
     for fold in range(model_config.num_folds):
         logger.info(f"Training and predicting for fold {fold}")
-        train_feather = pd.read_feather(os.path.join(model_config.output, f"train_fold_{fold}.feather"))
-        valid_feather = pd.read_feather(os.path.join(model_config.output, f"valid_fold_{fold}.feather"))
+        train_feather = pd.read_feather(
+            os.path.join(model_config.output, f"train_fold_{fold}.feather")
+        )
+        valid_feather = pd.read_feather(
+            os.path.join(model_config.output, f"valid_fold_{fold}.feather")
+        )
 
         xtrain = train_feather[model_config.features]
         xvalid = valid_feather[model_config.features]
@@ -248,7 +281,9 @@ def predict_model(model_config, best_params):
         valid_ids = valid_feather[model_config.idx].values
 
         if model_config.test_filename is not None:
-            test_feather = pd.read_feather(os.path.join(model_config.output, f"test_fold_{fold}.feather"))
+            test_feather = pd.read_feather(
+                os.path.join(model_config.output, f"test_fold_{fold}.feather")
+            )
             xtest = test_feather[model_config.features]
             ytest = test_feather[model_config.targets].values
             test_ids = test_feather[model_config.idx].values
@@ -263,7 +298,10 @@ def predict_model(model_config, best_params):
             **best_params,
         )
 
-        if model_config.problem_type in (ProblemType.multi_column_regression, ProblemType.multi_label_classification):
+        if model_config.problem_type in (
+            ProblemType.multi_column_regression,
+            ProblemType.multi_label_classification,
+        ):
             ypred = []
             test_pred = []
             trained_models = []
@@ -349,13 +387,21 @@ def predict_model(model_config, best_params):
     logger.info(f"Metrics: {mean_metrics}")
     with open("metrics.json", "w") as fp:
         json.dump(mean_metrics, fp)
-    save_valid_predictions(final_valid_predictions, model_config, target_encoder, "oof_predictions.csv")
+    save_valid_predictions(
+        final_valid_predictions, model_config, target_encoder, "oof_predictions.csv"
+    )
 
     logger.info(f"Best Params: {best_params}")
     with open("best_params.json", "w") as fp:
         json.dump(best_params, fp)
 
     if model_config.test_filename is not None:
-        save_test_predictions(final_test_predictions, model_config, target_encoder, test_ids, "test_predictions.csv")
+        save_test_predictions(
+            final_test_predictions,
+            model_config,
+            target_encoder,
+            test_ids,
+            "test_predictions.csv",
+        )
     else:
         logger.info("No test data supplied. Only OOF predictions were generated")
