@@ -15,6 +15,7 @@ INSTALL_REQUIRES = [
     "scikit-learn==1.0.1",
     "uvicorn==0.15.0",
     "xgboost==1.5.0",
+    "google-cloud-aiplatform==1.25.0",
 ]
 
 if __name__ == "__main__":
