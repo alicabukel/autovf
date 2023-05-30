@@ -16,7 +16,7 @@ from .utils import predict_model, reduce_memory_usage, train_model
 
 
 @dataclass
-class AutoXGB:
+class AutoVF:
     # required arguments
     train_filename: str
     output: str
@@ -235,12 +235,12 @@ class AutoXGB:
         self.model_config = ModelConfig(**model_config)
         logger.info(f"Model config: {self.model_config}")
         logger.info("Saving model config")
-        joblib.dump(self.model_config, f"{self.output}/axgb.config")
+        joblib.dump(self.model_config, f"{self.output}/avf.config")
 
         # save encoders
         logger.info("Saving encoders")
-        joblib.dump(categorical_encoders, f"{self.output}/axgb.categorical_encoders")
-        joblib.dump(target_encoder, f"{self.output}/axgb.target_encoder")
+        joblib.dump(categorical_encoders, f"{self.output}/avf.categorical_encoders")
+        joblib.dump(target_encoder, f"{self.output}/avf.target_encoder")
 
     def train(self):
         self._process_data()

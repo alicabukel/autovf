@@ -1,4 +1,4 @@
-# AutoXGB
+# AutoVF
 
 
 XGBoost + Optuna:  no brainer
@@ -13,11 +13,11 @@ NOTE: PRs are currently not accepted. If there are issues/problems, please creat
 
 Install using pip
 
-    pip install autoxgb
+    pip install autovf
 
 
 # Usage
-Training a model using AutoXGB is a piece of cake. All you need is some tabular data.
+Training a model using AutoVF is a piece of cake. All you need is some tabular data.
 
 ## Parameters
 
@@ -109,7 +109,7 @@ fast = False
 To train a new model, you can run:
 
 ```python
-from autoxgb import AutoXGB
+from autovf import AutoVF
 
 
 # required parameters:
@@ -131,7 +131,7 @@ time_limit = 360
 fast = False
 
 # Now its time to train the model!
-axgb = AutoXGB(
+avf = AutoVF(
     train_filename=train_filename,
     output=output,
     test_filename=test_filename,
@@ -147,36 +147,36 @@ axgb = AutoXGB(
     time_limit=time_limit,
     fast=fast,
 )
-axgb.train()
+avf.train()
 ```
 
 # CLI
 
-Train the model using the `autoxgb train` command. The parameters are same as above.
+Train the model using the `autovf train` command. The parameters are same as above.
 
 ```
-autoxgb train \
+autovf train \
  --train_filename datasets/30train.csv \
  --output outputs/30days \
  --test_filename datasets/30test.csv \
  --use_gpu
 ```
 
-You can also serve the trained model using the `autoxgb serve` command.
+You can also serve the trained model using the `autovf serve` command.
 
 ```bash
-autoxgb serve --model_path outputs/mll --host 0.0.0.0 --debug
+autovf serve --model_path outputs/mll --host 0.0.0.0 --debug
 ```
 
 To know more about a command, run:
 
-    `autoxgb <command> --help` 
+    `autovf <command> --help` 
 
 ```
-autoxgb train --help
+autovf train --help
 
 
-usage: autoxgb <command> [<args>] train [-h] --train_filename TRAIN_FILENAME [--test_filename TEST_FILENAME] --output
+usage: autovf <command> [<args>] train [-h] --train_filename TRAIN_FILENAME [--test_filename TEST_FILENAME] --output
                                         OUTPUT [--task {classification,regression}] [--idx IDX] [--targets TARGETS]
                                         [--num_folds NUM_FOLDS] [--features FEATURES] [--use_gpu] [--fast]
                                         [--seed SEED] [--time_limit TIME_LIMIT]

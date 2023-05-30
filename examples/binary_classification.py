@@ -1,4 +1,4 @@
-from autoxgb import AutoXGB
+from autovf import AutoVF
 
 
 # required parameters:
@@ -20,7 +20,7 @@ time_limit = 360
 fast = False
 
 # Now its time to train the model!
-axgb = AutoXGB(
+avf = AutoVF(
     train_filename=train_filename,
     output=output,
     test_filename=test_filename,
@@ -36,4 +36,4 @@ axgb = AutoXGB(
     time_limit=time_limit,
     fast=fast,
 )
-axgb.train()
+avf.train()

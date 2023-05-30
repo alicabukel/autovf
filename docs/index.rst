@@ -1,6 +1,6 @@
-.. AutoXGB documentation 
+.. AutoVF documentation 
 
-Welcome to AutoXGB's documentation!
+Welcome to AutoVF's documentation!
 ===================================
 
 .. toctree::

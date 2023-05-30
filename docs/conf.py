@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "AutoXGB"
-copyright = "2021, Abhishek Thakur"
-author = "Abhishek Thakur"
+project = "AutoVF"
+copyright = "2023, Ali Cabukel"
+author = "Ali Cabukel"
 
 
 # -- General configuration ---------------------------------------------------

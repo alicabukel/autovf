@@ -6,7 +6,6 @@ with open("README.md") as f:
 
 INSTALL_REQUIRES = [
     "fastapi==0.70.0",
-    "loguru==0.5.3",
     "numpy==1.21.3",
     "optuna==2.10.0",
     "pyarrow==6.0.0",
@@ -20,17 +19,17 @@ INSTALL_REQUIRES = [
 
 if __name__ == "__main__":
     setup(
-        name="autoxgb",
-        description="autoxgb: tuning xgboost with optuna",
+        name="autovf",
+        description="autovf: tuning xgboost with optuna",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        author="Abhishek Thakur",
-        author_email="abhishek4@gmail.com",
-        url="https://github.com/abhishekkrthakur/autoxgb",
+        author="Ali Cabukel",
+        author_email="alicabukel@proton.me",
+        url="https://github.com/alicabukel/autovf",
         license="Apache 2.0",
         package_dir={"": "src"},
         packages=find_packages("src"),
-        entry_points={"console_scripts": ["autoxgb=autoxgb.cli.autoxgb:main"]},
+        entry_points={"console_scripts": ["autovf=autovf.cli.autovf:main"]},
         include_package_data=True,
         install_requires=INSTALL_REQUIRES,
         platforms=["linux", "unix"],

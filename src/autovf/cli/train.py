@@ -1,12 +1,12 @@
 from argparse import ArgumentParser
 
-from ..autoxgb import AutoXGB
+from ..autovf import AutoVF
 from ..enums import TaskType
 from . import BaseCommand
 
 
-def train_autoxgb_command_factory(args):
-    return TrainAutoXGBCommand(
+def train_autovf_command_factory(args):
+    return TrainAutoVFCommand(
         args.train_filename,
         args.idx,
         args.targets,
@@ -22,10 +22,10 @@ def train_autoxgb_command_factory(args):
     )
 
 
-class TrainAutoXGBCommand(BaseCommand):
+class TrainAutoVFCommand(BaseCommand):
     @staticmethod
     def register_subcommand(parser: ArgumentParser):
-        _parser = parser.add_parser("train", help="Train a new model using AutoXGB")
+        _parser = parser.add_parser("train", help="Train a new model using AutoVF")
         _parser.add_argument(
             "--train_filename",
             help="Path to training file",
@@ -108,7 +108,7 @@ class TrainAutoXGBCommand(BaseCommand):
             default=None,
         )
 
-        _parser.set_defaults(func=train_autoxgb_command_factory)
+        _parser.set_defaults(func=train_autovf_command_factory)
 
     def __init__(
         self,
@@ -139,7 +139,7 @@ class TrainAutoXGBCommand(BaseCommand):
         self.fast = fast
 
     def execute(self):
-        axgb = AutoXGB(
+        avf = AutoVF(
             train_filename=self.train_filename,
             idx=self.idx,
             targets=self.targets,
@@ -153,4 +153,4 @@ class TrainAutoXGBCommand(BaseCommand):
             time_limit=self.time_limit,
             fast=self.fast,
         )
-        axgb.train()
+        avf.train()

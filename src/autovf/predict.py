@@ -17,16 +17,16 @@ xgb.set_config(verbosity=0)
 
 
 @dataclass
-class AutoXGBPredict:
+class AutoVFPredict:
     model_path: str
 
     def __post_init__(self):
-        self.model_config = joblib.load(os.path.join(self.model_path, "axgb.config"))
-        self.target_encoder = joblib.load(os.path.join(self.model_path, "axgb.target_encoder"))
-        self.categorical_encoders = joblib.load(os.path.join(self.model_path, "axgb.categorical_encoders"))
+        self.model_config = joblib.load(os.path.join(self.model_path, "avf.config"))
+        self.target_encoder = joblib.load(os.path.join(self.model_path, "avf.target_encoder"))
+        self.categorical_encoders = joblib.load(os.path.join(self.model_path, "avf.categorical_encoders"))
         self.models = []
         for fold in range(self.model_config.num_folds):
-            model_ = joblib.load(os.path.join(self.model_path, f"axgb_model.{fold}"))
+            model_ = joblib.load(os.path.join(self.model_path, f"avf_model.{fold}"))
             self.models.append(model_)
 
         _, self.use_predict_proba, _, _ = fetch_xgb_model_params(self.model_config)

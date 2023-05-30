@@ -2,11 +2,11 @@ import os
 
 from fastapi import FastAPI
 
-from .predict import AutoXGBPredict
+from .predict import AutoVFPredict
 
 
 app = FastAPI()
-axgp = AutoXGBPredict(model_path=os.environ.get("AUTOXGB_MODEL_PATH"))
+axgp = AutoVFPredict(model_path=os.environ.get("AUTOVF_MODEL_PATH"))
 schema = axgp.get_prediction_schema()
 
 
