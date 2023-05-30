@@ -10,7 +10,7 @@ INSTALL_REQUIRES = [
     "optuna==2.10.0",
     "pyarrow==6.0.0",
     "pydantic==1.8.2",
-    "joblib==1.1.0",
+    "joblib==1.1.1",
     "pandas==1.3.4",
     "scikit-learn==1.0.1",
     "uvicorn==0.15.0",
