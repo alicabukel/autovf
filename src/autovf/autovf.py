@@ -34,6 +34,9 @@ class AutoVF:
     num_trials: Optional[int] = 1000
     time_limit: Optional[int] = None
     fast: Optional[bool] = False
+    project_name: Optional[str] = None
+    project_location: Optional[str] = None
+
 
     def __post_init__(self):
         if os.path.exists(self.output):
@@ -263,6 +266,8 @@ class AutoVF:
         model_config["num_trials"] = self.num_trials
         model_config["time_limit"] = self.time_limit
         model_config["fast"] = self.fast
+        model_config["project_name"] = self.project_name
+        model_config["project_location"] = self.project_location
 
         self.model_config = ModelConfig(**model_config)
         logger.info(f"Model config: {self.model_config}")

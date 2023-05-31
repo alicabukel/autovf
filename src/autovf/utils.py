@@ -1,6 +1,7 @@
 import copy
 import os
 import json
+import time    
 from functools import partial
 
 import joblib
@@ -13,6 +14,7 @@ from .enums import ProblemType
 from .logger import logger
 from .metrics import Metrics
 from .params import get_params
+from google.cloud import aiplatform
 
 
 optuna.logging.set_verbosity(optuna.logging.INFO)
@@ -210,6 +212,35 @@ def optimize(
 
         # calculate metric
         metric_dict = metrics.calculate(yvalid, ypred)
+
+        if model_config.project_name is not None and model_config.project_location is not None:
+            aiplatform.init(
+                experiment=model_config.output,
+                project_name=model_config.project_name,
+                location=model_config.project_location,
+            )
+            aiplatform.start_run(run=f"study_{int(time.time())}")
+            params = model.get_params()
+            param_keys = [
+                "booster",
+                "colsample_bylevel",
+                "colsample_bynode",
+                "colsample_bytree",
+                "gamma",
+                "learning_rate",
+                "max_depth",
+                "min_child_weight",
+                "n_estimators",
+                "random_state",
+                "reg_alpha",
+                "reg_lambda",
+                "subsample",
+                "tree_method",
+            ]
+            params = {k: v for k, v in params.items() if k in param_keys}
+            aiplatform.log_params(params)
+            aiplatform.log_metrics(metric_dict)
+            aiplatform.end_run()
         scores.append(metric_dict)
         if model_config.fast is True:
             break
