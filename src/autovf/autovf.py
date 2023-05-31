@@ -37,7 +37,6 @@ class AutoVF:
     project_name: Optional[str] = None
     project_location: Optional[str] = None
 
-
     def __post_init__(self):
         if os.path.exists(self.output):
             raise Exception(
