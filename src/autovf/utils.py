@@ -216,7 +216,7 @@ def optimize(
         if model_config.project_name is not None and model_config.project_location is not None:
             aiplatform.init(
                 experiment=model_config.output,
-                project_name=model_config.project_name,
+                project=model_config.project_name,
                 location=model_config.project_location,
             )
             aiplatform.start_run(run=f"study_{int(time.time())}")
