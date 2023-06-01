@@ -219,7 +219,7 @@ def optimize(
                 project=model_config.project_name,
                 location=model_config.project_location,
             )
-            aiplatform.start_run(run=f"study_{int(time.time())}")
+            aiplatform.start_run(run=f"study-{int(time.time())}")
             params = model.get_params()
             param_keys = [
                 "booster",
